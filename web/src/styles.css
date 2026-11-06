@@ -1,0 +1,747 @@
+/* Secret Santa: a paper slip you write your name on, dropped into a gift box. */
+
+:root {
+  --pine: #133a2c; /* page */
+  --pine-light: #1f5040;
+  --snow: #f4f7f3; /* text on pine */
+  --frost: #a9c4b6; /* quieter text on pine */
+  --paper: #ffffff;
+  --ink: #1c2a23; /* text on paper */
+  --ink-soft: #55665c;
+  --line: #dde4de; /* borders on paper */
+  --rule: #a7c2dc; /* the ruled line under the name, like notebook paper */
+  --berry: #c12e3a;
+  --berry-dark: #9a1f2a;
+  --gold: #e3b04b;
+  --ok: #1d7347;
+  --warn: #7f5300;
+  --bad: #b3261e;
+
+  --body: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --marker: 'Permanent Marker', 'Marker Felt', 'Comic Sans MS', cursive;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--pine);
+  color: var(--snow);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.marker {
+  font-family: var(--marker);
+  font-weight: 400;
+}
+
+.muted {
+  color: var(--ink-soft);
+}
+
+.small {
+  font-size: 14px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.slip :focus-visible,
+.sheet :focus-visible {
+  outline-color: var(--pine);
+}
+
+/* ---------- Buttons ---------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.button--primary {
+  background: var(--berry);
+  color: #fff;
+}
+
+.button--primary:hover:not(:disabled) {
+  background: var(--berry-dark);
+}
+
+.button--secondary {
+  background: transparent;
+  color: var(--pine);
+  box-shadow: inset 0 0 0 2px var(--pine);
+}
+
+.button--secondary:hover:not(:disabled) {
+  background: #edf3ef;
+}
+
+.button--quiet {
+  padding: 0 6px;
+  background: transparent;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.button--full {
+  width: 100%;
+}
+
+.button--small {
+  min-height: 40px;
+  padding: 0 14px;
+  font-size: 15px;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.link-button {
+  padding: 4px 2px;
+  border: 0;
+  background: none;
+  color: var(--pine);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.link-button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.link-button--danger {
+  color: var(--bad);
+}
+
+.link-button--light {
+  color: var(--snow);
+}
+
+.link-button--inline {
+  padding: 0;
+}
+
+.message {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.message--error {
+  background: #fdecea;
+  color: var(--bad);
+}
+
+/* ---------- Sign-up page ---------- */
+
+.signup {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+}
+
+.signup__intro {
+  margin-bottom: 22px;
+}
+
+.signup__title {
+  margin-bottom: 14px;
+  color: var(--snow);
+  font-size: 56px;
+  line-height: 1;
+  transform: rotate(-2deg);
+  transform-origin: left center;
+}
+
+.signup__when {
+  font-weight: 700;
+}
+
+.signup__how {
+  margin-top: 4px;
+  color: var(--frost);
+}
+
+.signup__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 28px;
+  color: var(--frost);
+  font-size: 15px;
+}
+
+/* The paper slip */
+
+.slip {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 26px 22px 22px;
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.06),
+    0 22px 40px -14px rgba(0, 0, 0, 0.5);
+}
+
+.slip--loading {
+  min-height: 220px;
+  align-items: center;
+  justify-content: center;
+}
+
+.slip__heading {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.slip__done-title {
+  color: var(--berry);
+  font-size: 36px;
+  line-height: 1.1;
+}
+
+.slip--done {
+  align-items: flex-start;
+  animation: slip-in 300ms ease-out;
+}
+
+/* Fold the slip and drop it into the box */
+.slip--dropping {
+  pointer-events: none;
+  transform-origin: 50% 100%;
+  animation: slip-drop 700ms cubic-bezier(0.55, 0, 0.75, 0.2) forwards;
+}
+
+@keyframes slip-drop {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  40% {
+    transform: scale(0.36, 0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(150px) scale(0.32, 0.06);
+    opacity: 0;
+  }
+}
+
+@keyframes slip-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Form fields */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.field input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 17px;
+}
+
+.field input:focus-visible {
+  border-color: var(--pine);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(19, 58, 44, 0.18);
+}
+
+.field--error input {
+  border-color: var(--bad);
+}
+
+/* The name gets written in marker on a ruled line */
+.field .name-input {
+  min-height: 56px;
+  padding: 6px 2px 2px;
+  border: 0;
+  border-bottom: 2px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--marker);
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.field .name-input:focus-visible {
+  border-bottom-color: var(--pine);
+  box-shadow: 0 2px 0 0 var(--pine);
+}
+
+.field--error .name-input {
+  border-bottom-color: var(--bad);
+}
+
+.field input:disabled {
+  opacity: 0.7;
+}
+
+.field__help {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.field__suggestion {
+  font-size: 15px;
+}
+
+.field__error {
+  color: var(--bad);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* The box */
+
+/* Sits in front of the slip, so a dropped slip disappears into it */
+.draw-box {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: min(280px, 80%);
+  margin: 26px auto 0;
+}
+
+.draw-box--bump {
+  transform-origin: 50% 100%;
+  animation: box-bump 380ms ease-out;
+}
+
+@keyframes box-bump {
+  35% {
+    transform: scale(1.04, 0.95);
+  }
+}
+
+@media (max-width: 360px) {
+  .signup__title {
+    font-size: 44px;
+  }
+}
+
+@media (min-width: 600px) {
+  .signup {
+    padding-top: 64px;
+  }
+
+  .signup__title {
+    font-size: 62px;
+  }
+
+  .slip {
+    padding: 32px 30px 28px;
+  }
+}
+
+/* ---------- Admin page ---------- */
+
+.admin {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px 16px 120px;
+}
+
+.admin__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 16px;
+  margin-bottom: 20px;
+}
+
+.admin__title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.admin__title .marker {
+  margin-right: 4px;
+  font-size: 34px;
+}
+
+.admin__who {
+  color: var(--frost);
+  font-size: 15px;
+}
+
+.admin__loading {
+  color: var(--frost);
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.sheet + .sheet {
+  margin-top: 16px;
+}
+
+.sheet--narrow {
+  max-width: 460px;
+  align-items: flex-start;
+}
+
+.sheet .field {
+  align-self: stretch;
+}
+
+.sheet__heading {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.sheet__count {
+  margin-left: 4px;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+/* Steps: close sign-ups, draw, check emails */
+
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 14px;
+  padding: 16px 0;
+}
+
+.step:first-child {
+  padding-top: 2px;
+}
+
+.step:last-child {
+  padding-bottom: 2px;
+}
+
+.step + .step {
+  border-top: 1px solid var(--line);
+}
+
+.step__marker {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink-soft);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.step--current .step__marker {
+  border-color: var(--berry);
+  background: var(--berry);
+  color: #fff;
+}
+
+.step--done .step__marker {
+  border-color: var(--pine);
+  background: var(--pine);
+  color: #fff;
+}
+
+.step__body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.step__title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+.step--later .step__title {
+  color: var(--ink-soft);
+}
+
+.share {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.share__label {
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.share__row {
+  display: flex;
+  gap: 8px;
+}
+
+.share__input {
+  min-width: 0;
+  flex: 1;
+  padding: 8px 10px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: #f6f8f6;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+}
+
+.confirm {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 2px solid #efc4c8;
+  border-radius: 10px;
+  background: #fff5f5;
+}
+
+/* People list */
+
+.roster {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.roster__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.roster__who {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.roster__name {
+  font-weight: 700;
+}
+
+.roster__email {
+  color: var(--ink-soft);
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+.roster__error {
+  margin-top: 2px;
+  color: var(--bad);
+  font-size: 14px;
+}
+
+.roster__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.roster__date {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.tag {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #eef1ee;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tag--ok {
+  background: #e2f2e9;
+  color: var(--ok);
+}
+
+.tag--bad {
+  background: #fdecea;
+  color: var(--bad);
+}
+
+.tag--warn {
+  background: #fcf1d8;
+  color: var(--warn);
+}
+
+.toast {
+  position: fixed;
+  z-index: 20;
+  bottom: calc(16px + var(--demo-bar-space, 0px));
+  left: 50%;
+  display: flex;
+  width: min(560px, calc(100% - 24px));
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--ink);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 15px;
+  transform: translateX(-50%);
+}
+
+.toast--warn {
+  background: #5a3b05;
+}
+
+.toast--error {
+  background: var(--bad);
+}
+
+/* ---------- Demo bar (demo build only) ---------- */
+
+body:has(.demo-bar) {
+  --demo-bar-space: 64px;
+  padding-bottom: 72px;
+}
+
+.demo-bar {
+  position: fixed;
+  z-index: 30;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--pine-light);
+  background: #0c2a1f;
+  color: var(--frost);
+  font-size: 14px;
+}
+
+.demo-bar__links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.demo-bar a,
+.demo-bar button {
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  color: var(--snow);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.demo-bar a[aria-current='page'] {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slip--dropping,
+  .slip--done,
+  .draw-box--bump {
+    animation: none;
+  }
+}

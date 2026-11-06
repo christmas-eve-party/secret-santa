@@ -1,0 +1,9 @@
+{
+  "name": "secret-santa-apps-script",
+  "private": true,
+  "type": "module",
+  "description": "Tests for Code.gs. The code itself runs in Google Apps Script, not Node.",
+  "scripts": {
+    "test": "node --test \"test/*.test.js\""
+  }
+}
