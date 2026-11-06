@@ -6,7 +6,7 @@
  * and gets JSON back: { ok: true, ...result } or { ok: false, code, message }.
  *
  * Everything is kept in this script's Script properties (Project Settings > Script properties):
- *   ADMIN_PASSWORD  the admin page password. You add this one yourself (see the README).
+ *   ADMIN_PASSWORD  the admin page password. The script makes it and emails it to you (see setup()).
  *   state           { status: 'open' | 'closed' | 'drawn', drawnAt }
  *   person:<id>     one per person who signed up
  *   match:<id>      who that person gives to. The website never gets these, not even the admin page.
