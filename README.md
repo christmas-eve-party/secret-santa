@@ -35,6 +35,7 @@ To check the backend, open the Web app URL in a browser. You should see a line o
 - Emails come from the Google account that deployed the script, with "Secret Santa" as the sender's name.
 - Apps Script can email 100 people a day from a regular Gmail account. The draw emails everyone at once, so sign-ups stop at 90, and the draw waits until tomorrow if today's limit can't cover everyone. The admin page tells you when that happens.
 - Close sign-ups first, then draw names. The draw only happens once.
+- **Test run:** sign up 3 test people with Gmail "+" addresses (like `yourname+1@gmail.com`, `yourname+2@gmail.com`), which all land in your inbox. Close sign-ups, draw names, and check the emails. Then, in the Apps Script editor, pick **startOver** next to **Run** and click **Run**. That wipes the sign-ups, the draw, and the matches, and opens sign-ups again. The admin password stays the same. There's no undo.
 - You can remove people until names are drawn.
 - Mistyped email addresses usually don't fail right away. Gmail sends a "couldn't be delivered" notice to your inbox instead. Since everyone gets a confirmation email when they sign up, those notices show up before the draw, while it's still easy to fix: remove the person and have them sign up again.
 - The matches are saved in the script's Script properties as `match:` entries, using ID numbers instead of names. Skip those if you want to be surprised too.

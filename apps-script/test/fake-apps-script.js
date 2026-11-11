@@ -60,7 +60,10 @@ export function loadBackend({ emailsLeftToday = 100 } = {}) {
 
   const context = vm.createContext(sandbox);
   vm.runInContext(CODE, context, { filename: 'Code.gs' });
-  const inside = vm.runInContext('({ EVENT, makeAssignments, shuffle, confirmationEmail, matchEmail, cleanName, cleanEmail })', context);
+  const inside = vm.runInContext(
+    '({ EVENT, makeAssignments, shuffle, confirmationEmail, matchEmail, cleanName, cleanEmail, startOver })',
+    context,
+  );
 
   // Calls the web app the way the website does: a POST with a JSON body.
   const call = (action, data = {}) =>

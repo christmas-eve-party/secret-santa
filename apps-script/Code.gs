@@ -46,6 +46,23 @@ function setup() {
   console.log(sent ? 'Admin password emailed to ' + organizerEmail() : 'Admin password was already set (see Script properties)');
 }
 
+// Run this from the editor after a test run (pick "startOver" next to Run). It wipes everyone who
+// signed up, the draw, and the matches, and opens sign-ups again. The admin password stays the same.
+// There's no undo, so check the list on the admin page first.
+function startOver() {
+  const removed = withLock(() => {
+    const all = props().getProperties();
+    const names = [];
+    Object.keys(all).forEach((key) => {
+      if (key.indexOf('person:') === 0) names.push(JSON.parse(all[key]).name);
+      if (key === 'state' || key.indexOf('person:') === 0 || key.indexOf('match:') === 0) props().deleteProperty(key);
+    });
+    return names;
+  });
+  console.log('Started over. Removed ' + removed.length + ' people: ' + (removed.join(', ') || 'nobody') + '. Sign-ups are open.');
+  return removed.length;
+}
+
 function organizerEmail() {
   return ORGANIZER_EMAIL || Session.getEffectiveUser().getEmail();
 }

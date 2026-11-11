@@ -216,3 +216,25 @@ test('if the confirmation email fails, the sign-up still counts and the admin se
   assert.equal(call('signUp', { name: 'Maria', email: 'maria@example.com' }).confirmation, 'failed');
   assert.equal(admin('overview').people[0].confirmEmail, 'failed');
 });
+
+test('startOver wipes a test run: sign-ups, the draw, and matches go, the password stays', () => {
+  const { call, admin, store, startOver, participantCount } = setUp();
+  store.set('SOMETHING_ELSE', 'keep me');
+  assert.equal(startOver(), 0, 'nothing to wipe yet');
+
+  for (const [name, email] of PEOPLE.slice(0, 3)) assert.equal(call('signUp', { name, email }).ok, true);
+  assert.equal(admin('setSignupsOpen', { open: false }).status, 'closed');
+  assert.equal(admin('drawNames').ok, true);
+  assert.equal(call('getStatus').status, 'drawn');
+
+  assert.equal(startOver(), 3);
+  assert.equal(participantCount(), 0);
+  assert.deepEqual([...store.keys()].filter((key) => key.startsWith('match:')), []);
+  assert.equal(store.get('ADMIN_PASSWORD'), PASSWORD);
+  assert.equal(store.get('SOMETHING_ELSE'), 'keep me');
+  assert.equal(call('getStatus').status, 'open');
+
+  const [name, email] = PEOPLE[0];
+  assert.equal(call('signUp', { name, email }).ok, true, 'the same email can sign up again for real');
+  assert.equal(participantCount(), 1);
+});
