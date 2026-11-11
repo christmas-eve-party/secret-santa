@@ -208,6 +208,14 @@ p {
   color: var(--frost);
 }
 
+.signup__ask {
+  margin-top: 12px;
+  padding-left: 10px;
+  border-left: 3px solid var(--gold);
+  color: var(--snow);
+  font-weight: 700;
+}
+
 .signup__footer {
   display: flex;
   flex-direction: column;

@@ -66,6 +66,7 @@ export default function SignupPage() {
             <p className="signup__how">
               Spend up to {event.budget}. Once names are drawn, we'll email you the person you're shopping for.
             </p>
+            {event.signupNote && <p className="signup__ask">{event.signupNote}</p>}
           </>
         )}
       </header>

@@ -18,11 +18,13 @@
 
 const EVENT = {
   partyName: 'Christmas Eve Party',
-  when: 'Thursday, Dec 24 at 5:30 PM, right after close',
+  when: 'Thursday, Dec 24 at 6:00 PM, right after close',
   budget: '$20',
-  organizer: 'Kura',
+  organizer: 'Jacob',
+  // Shown near the top of the sign-up page. Set to '' to hide it.
+  signupNote: "If you don't know if you can make it, please don't sign up.",
   // Small print at the bottom of the sign-up page and the match email. Set to '' to hide it.
-  note: "Heads up: if you're coming, please be ready to pitch in on a quick closing task so we can get the party going sooner!",
+  note: '',
 };
 
 // Send a "you're signed up" email right after someone signs up, so a mistyped address shows up before the draw.

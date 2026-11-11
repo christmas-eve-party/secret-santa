@@ -4,10 +4,11 @@
 
 const EVENT = {
   partyName: 'Christmas Eve Party',
-  when: 'Thursday, Dec 24 at 5:30 PM, right after close',
+  when: 'Thursday, Dec 24 at 6:00 PM, right after close',
   budget: '$20',
-  organizer: 'Kura',
-  note: "Heads up: if you're coming, please be ready to pitch in on a quick closing task so we can get the party going sooner!",
+  organizer: 'Jacob',
+  signupNote: "If you don't know if you can make it, please don't sign up.",
+  note: '',
 };
 
 const SEED = [
