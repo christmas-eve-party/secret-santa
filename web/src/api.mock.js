@@ -6,8 +6,8 @@ const EVENT = {
   partyName: 'Christmas Eve Party',
   when: 'Thursday, Dec 24 at 6:00 PM, right after close',
   budget: '$20',
-  organizer: 'Jacob',
-  signupNote: "If you don't know if you can make it, please don't sign up.",
+  organizer: 'Jacob and Nic',
+  signupNote: "Sign up by Thursday, Dec 10. If you don't know if you can make it, please don't sign up.",
   note: '',
 };
 

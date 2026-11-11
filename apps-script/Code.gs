@@ -20,9 +20,9 @@ const EVENT = {
   partyName: 'Christmas Eve Party',
   when: 'Thursday, Dec 24 at 6:00 PM, right after close',
   budget: '$20',
-  organizer: 'Jacob',
+  organizer: 'Jacob and Nic',
   // Shown near the top of the sign-up page. Set to '' to hide it.
-  signupNote: "If you don't know if you can make it, please don't sign up.",
+  signupNote: "Sign up by Thursday, Dec 10. If you don't know if you can make it, please don't sign up.",
   // Small print at the bottom of the sign-up page and the match email. Set to '' to hide it.
   note: '',
 };
